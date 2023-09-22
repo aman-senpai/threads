@@ -19,6 +19,8 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
 
 interface Props {
     user: {
@@ -33,6 +35,10 @@ interface Props {
 }
 
 const AccountProfile = ({ user, btnTitle }: Props) => {
+    const [files, setFiles] = useState<File[]>([]);
+
+    const { startUpload } = useUploadThing("media");
+
     const form = useForm({
         resolver: zodResolver(UserValidation),
         defaultValues: {
@@ -43,8 +49,6 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         },
     });
 
-    const [files, setFiles] = useState<File[]>([]);
-
     const handleImage = (
         e: ChangeEvent<HTMLInputElement>,
         fieldChange: (value: string) => void
@@ -53,7 +57,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
         const fileReader = new FileReader();
 
-        if (e.target.files && e.target.files.length > 1) {
+        if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             setFiles(Array.from(e.target.files));
 
@@ -61,19 +65,28 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
             fileReader.onload = async (event) => {
                 const imageDataUrl = event.target?.result?.toString() || "";
-
                 fieldChange(imageDataUrl);
             };
 
-            fileReader.readAsDataURL;
+            fileReader.readAsDataURL(file);
         }
     };
 
-    function onSubmit(values: z.infer<typeof UserValidation>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values);
-    }
+    const onSubmit = async (values: z.infer<typeof UserValidation>) => {
+        const blob = values.profile_photo;
+
+        const hasImageChange = isBase64Image(blob);
+
+        if (hasImageChange) {
+            const imgRes = await startUpload(files);
+
+            if (imgRes && imgRes[0].fileUrl) {
+                values.profile_photo = imgRes[0].fileUrl;
+            }
+        }
+
+        // TODO: Update user profile
+    };
 
     return (
         <Form {...form}>
