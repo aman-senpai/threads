@@ -33,7 +33,7 @@ interface Props {
     btnTitle: string;
 }
 
-const PostThread = ({ userId }: { userId: string }) => {
+const PostThread = (userId: string) => {
     const router = useRouter();
     const pathname = usePathname();
 
