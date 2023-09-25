@@ -69,7 +69,7 @@ const PostThread = ({ userId }: { userId: string }) => {
                             <FormLabel className="text-base-semibold text-light-2">
                                 Content
                             </FormLabel>
-                            <FormControl className="no-focus border border-dark-4 text-light-1">
+                            <FormControl className="no-focus border border-dark-4 text-light-1 bg-dark-3">
                                 <Textarea
                                     rows={15}
                                     className="account-form_input no-focus"

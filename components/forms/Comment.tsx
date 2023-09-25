@@ -18,11 +18,9 @@ import { Input } from "../ui/input";
 import { usePathname, useRouter } from "next/navigation";
 
 // import { updateUser } from "@/lib/actions/user.actions";
-import {
-    CommentValidation,
-    addCommentToThread,
-} from "@/lib/validations/thread";
+import { CommentValidation } from "@/lib/validations/thread";
 import Image from "next/image";
+import { addCommentToThread } from "@/lib/actions/thread.actions";
 // import { createThread } from "@/lib/actions/thread.actions";
 
 interface Props {
@@ -52,7 +50,6 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
 
         form.reset();
     };
-
     return (
         <Form {...form}>
             <form
@@ -75,7 +72,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
                             </FormLabel>
                             <FormControl className="border-none bg-transparent">
                                 <Input
-                                    type="text"
+                                    type="test"
                                     placeholder="Comment..."
                                     className="no-focus text-light-1 outline-none"
                                     {...field}
