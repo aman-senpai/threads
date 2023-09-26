@@ -16,6 +16,7 @@ const Page = async () => {
     const userInfo = await fetchUser(user.id);
     const plainUser = JSON.parse(JSON.stringify(userInfo));
 
+    if (!userInfo?.onboarded) redirect("/onboarding");
     // Fetch users
     const result = await fetchUsers({
         userId: user.id,
@@ -24,7 +25,6 @@ const Page = async () => {
         pageSize: 25,
     });
 
-    if (!userInfo?.onboarded) redirect("/onboarding");
     return (
         <section>
             <h1 className="head-text mb-10">Search</h1>
