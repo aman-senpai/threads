@@ -1,4 +1,4 @@
-import { OrganizationSwitcher, SignOutButton, SignedIn } from "@clerk/nextjs";
+import { OrganizationSwitcher, SignOutButton, Show } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ const TopBar = () => {
             </Link>
             <div className="flex items-center gap-1">
                 <div className="block md:hidden">
-                    <SignedIn>
+                    <Show when="signed-in">
                         <SignOutButton>
                             <div className="flex cursor-pointer">
                                 <Image
@@ -34,7 +34,7 @@ const TopBar = () => {
                                 />
                             </div>
                         </SignOutButton>
-                    </SignedIn>
+                    </Show>
                 </div>
                 <OrganizationSwitcher
                     appearance={{

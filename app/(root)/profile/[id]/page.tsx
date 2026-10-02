@@ -1,19 +1,20 @@
 import PostThread from "@/components/forms/PostThread";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { profileTabs } from "@/constants";
 import ThreadsTab from "@/components/shared/ThreadsTab";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
+    const { id } = await params;
     const user = await currentUser();
 
     if (!user) return null;
 
-    const userInfo = await fetchUser(params.id);
+    const userInfo = await fetchUser(id);
     const plainUser = JSON.parse(JSON.stringify(userInfo));
 
     if (!userInfo?.onboarded) redirect("/onboarding");
